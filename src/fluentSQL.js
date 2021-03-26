@@ -37,8 +37,20 @@ export default class FluentSQLBluider {
         return this;
     }
 
+    #performLimit(results) {
+        return this.#limit && results.length === this.#limit;
+    }
+
     bluid() {
         const results = [];
+
+        for (const item of this.#database) {
+            results.push(item);
+
+            if(this.#performLimit(results)) {
+                break;
+            }
+        }
 
         return results;
     }

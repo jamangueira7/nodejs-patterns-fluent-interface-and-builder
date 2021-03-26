@@ -30,11 +30,16 @@ describe('Test Suite for FluentSQL Bluider', () => {
 
     test('#bluid should return the empty object instance', () => {
         const result = FluentSQLBluider.for(data).bluid();
-        const expected = [];
+        const expected = data;
         expect(result).toStrictEqual(expected);
     });
 
-    test.todo('#limit given a collection it should limit results');
+    test('#limit given a collection it should limit results', () => {
+        const result = FluentSQLBluider.for(data).limit(1).bluid();
+        const expected = [data[0]];
+
+        expect(result).toStrictEqual(expected);
+    });
 
     test.todo('#where given a collection it should filter data');
 
