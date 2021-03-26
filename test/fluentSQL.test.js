@@ -23,30 +23,24 @@ const data = [
 
 describe('Test Suite for FluentSQL Bluider', () => {
    test('#for should return a FluentSQLBluider instance', () => {
-
+        const result = FluentSQLBluider.for(data);
+        const expected = new FluentSQLBluider({ database: data });
+        expect(result).toStrictEqual(expected);
    });
 
     test('#bluid should return the empty object instance', () => {
-
+        const result = FluentSQLBluider.for(data).bluid();
+        const expected = [];
+        expect(result).toStrictEqual(expected);
     });
 
-    test('#limit given a collection it should limit results', () => {
+    test.todo('#limit given a collection it should limit results');
 
-    });
+    test.todo('#where given a collection it should filter data');
 
-    test('#where given a collection it should filter data', () => {
+    test.todo('#select given a collection it should return only especifc fields');
 
-    });
+    test.todo('#orderBy given a collection it should order results by field');
 
-    test('#select given a collection it should return only especifc fields', () => {
-
-    });
-
-    test('#orderBy given a collection it should order results by field', () => {
-
-    });
-
-    test('pipeline', () => {
-
-    });
+    test.todo('pipeline');
 });
