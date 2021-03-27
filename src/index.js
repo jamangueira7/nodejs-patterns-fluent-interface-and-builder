@@ -10,6 +10,8 @@ const result = FluentSQLBluider
     //parenteses literais precisam de scapte () vira isso aqui \(\)
     .where({ phone: /\((852|890|810)\)/ })
     .select(['name', 'phone', 'category', 'registered'])
+    .orderBy('category')
+    .limit(2)
     .bluid();
 
 console.table(result);
