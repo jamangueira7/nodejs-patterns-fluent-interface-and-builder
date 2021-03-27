@@ -42,17 +42,62 @@ describe('Test Suite for FluentSQL Bluider', () => {
     });
 
     test('#where given a collection it should filter data', () => {
-        const result = FluentSQLBluider.for(data).where({
-            category: /^dev/
-        }).bluid();
+        const result = FluentSQLBluider.for(data)
+            .where({
+                category: /^dev/
+            }).bluid();
         const expected = data.filter(({ category}) => category.slice(0,3) === 'dev');
 
         expect(result).toStrictEqual(expected);
     });
 
-    test.todo('#select given a collection it should return only especifc fields');
+    test('#select given a collection it should return only especifc fields', () => {
+        const result = FluentSQLBluider.for(data)
+            .select(['name', 'category']).bluid();
 
-    test.todo('#orderBy given a collection it should order results by field');
+        const expected = data.map(({ name, category }) => ({ name, category }));
 
-    test.todo('pipeline');
+        expect(result).toStrictEqual(expected);
+    });
+
+    test('#orderBy given a collection it should order results by field', () => {
+        const result = FluentSQLBluider.for(data)
+            .orderBy(['name']).bluid();
+
+        const expected = [
+            {
+                id: 2,
+                name: 'carlos',
+                category: 'manager'
+            },
+            {
+                id: 0,
+                name: 'joao',
+                category: 'developer'
+            },
+
+            {
+                id: 1,
+                name: 'priscila',
+                category: 'developer'
+            },
+        ];
+
+        expect(result).toStrictEqual(expected);
+    });
+
+    test('pipeline', () => {
+        const result = FluentSQLBluider.for(data)
+            .where({ category: 'developer'})
+            .where({ name: /j/})
+            .select(['name', 'category'])
+            .orderBy(['name'])
+            .bluid();
+
+        const expected = data
+            .filter(({ id }) => id === 0)
+            .map(({ name, category}) => ({ name, category }));
+
+        expect(result).toStrictEqual(expected);
+    });
 });

@@ -3,7 +3,7 @@ export default class FluentSQLBluider {
     #limit = 0;
     #select = [];
     #where = [];
-    #orderBy = [];
+    #orderBy = '';
 
     constructor({ database }) {
         this.#database = database;
@@ -53,6 +53,28 @@ export default class FluentSQLBluider {
         return true;
     }
 
+    #performSelect(item) {
+        const currentItem = {};
+        const entries = Object.entries(item);
+        for(const [key, value] of entries) {
+            if(this.#select.length && !this.#select.includes(key)) {
+                continue;
+            }
+            currentItem[key] = value;
+        }
+
+        return currentItem;
+    }
+
+    #performOrderBy(results) {
+        if(!this.#orderBy) {
+            return results;
+        }
+        return results.sort((prev, next) => {
+           return prev[this.#orderBy].localeCompare(next[this.#orderBy]);
+        });
+    }
+
     bluid() {
         const results = [];
 
@@ -61,15 +83,18 @@ export default class FluentSQLBluider {
             if(!this.#performWhere(item)) {
                 continue;
             }
+            const currentItem = this.#performSelect(item);
 
-            results.push(item);
+            results.push(currentItem);
 
             if(this.#performLimit(results)) {
                 break;
             }
         }
 
-        return results;
+        const finalResult = this.#performOrderBy(results);
+
+        return finalResult;
     }
 
 }
