@@ -26,7 +26,9 @@ export default class FluentSQLBluider {
     }
 
     where(query) {
-        this.#where = query;
+        const [[prop, selectedValue]] = Object.entries(query);
+        const whereFilter = selectedValue instanceof RegExp ?selectedValue : new RegExp(selectedValue);
+        this.#where.push({ prop, filter: whereFilter });
 
         return this;
     }
@@ -41,10 +43,25 @@ export default class FluentSQLBluider {
         return this.#limit && results.length === this.#limit;
     }
 
+    #performWhere(item) {
+        for(const { filter, prop } of this.#where) {
+            if(!filter.test(item[prop])) {
+                return false
+            }
+        }
+
+        return true;
+    }
+
     bluid() {
         const results = [];
 
         for (const item of this.#database) {
+
+            if(!this.#performWhere(item)) {
+                continue;
+            }
+
             results.push(item);
 
             if(this.#performLimit(results)) {

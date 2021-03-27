@@ -41,7 +41,14 @@ describe('Test Suite for FluentSQL Bluider', () => {
         expect(result).toStrictEqual(expected);
     });
 
-    test.todo('#where given a collection it should filter data');
+    test('#where given a collection it should filter data', () => {
+        const result = FluentSQLBluider.for(data).where({
+            category: /^dev/
+        }).bluid();
+        const expected = data.filter(({ category}) => category.slice(0,3) === 'dev');
+
+        expect(result).toStrictEqual(expected);
+    });
 
     test.todo('#select given a collection it should return only especifc fields');
 
